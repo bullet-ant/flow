@@ -17,6 +17,7 @@ body {
     -webkit-font-smoothing: antialiased;
     color: #fff;
     font-size: 16px;
+    background-color: #333;
 }
 
 .topbar {
@@ -63,23 +64,19 @@ body {
     height: 100vh;
     padding: 20px;
     text-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
-    opacity: 0;
-    transition: opacity 1.5s ease;
-}
-
-.container.fade-in {
-    opacity: 1;
 }
 
 .clock {
     font-size: 9rem;
     font-weight: 600;
+    animation: fade-in 1s ease forwards;
 }
 
 .greeting {
     margin-top: 5px;
     font-size: 2.5rem;
     font-weight: 600;
+    animation: fade-in 1s ease forwards;
 }
 
 .quote {
@@ -90,4 +87,14 @@ body {
     transform: translateX(-50%);
     width: 70%;
     text-align: center;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }

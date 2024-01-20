@@ -49,20 +49,21 @@ import { getName, saveName } from "./storage";
     ).innerHTML = `${data.city}, ${data.country}`;
   }
 
-  function fadeIn() {
-    const container = document.querySelector(".container");
-    container.classList.add("fade-in");
-  }
-
   function setBackgroundImage(urls = []) {
     const background = getWallpaperIndex(urls);
 
-    if (background.external)
-      document.body.style.backgroundImage = `url('${urls[background.index]}')`;
-    else
-      document.body.style.backgroundImage = `url('images/${
-        background.index === 0 ? "morning.jpeg" : "night.jpeg"
-      }')`;
+    document.body.style.backgroundColor = "#333";
+
+    const image = new Image();
+    image.src = background.external
+      ? urls[background.index]
+      : `images/${background.index === 0 ? "morning.jpeg" : "night.jpeg"}`;
+
+    image.onload = () => {
+      document.body.style.backgroundImage = `url('${image.src}')`;
+      document.body.style.transition = `background 0.5s ease-in`;
+      document.body.style.backgroundColor = `transparent`;
+    };
   }
 
   async function setupDashboard() {
@@ -74,8 +75,6 @@ import { getName, saveName } from "./storage";
     setBackgroundImage();
     setGreetings(name);
     setQuote();
-
-    fadeIn();
 
     setInterval(setTime, 1000);
     setInterval(setGreetings, 60 * 60 * 1000);
@@ -98,12 +97,21 @@ import { getName, saveName } from "./storage";
 
   // Get background images from worker
   (async () => {
-    const response = await chrome.runtime.sendMessage({
+    let response = await chrome.runtime.sendMessage({
       type: "BACKGROUND",
       payload: {
         collection_id: "Ql7C2dPpjkw",
       },
     });
+
+    setInterval(async () => {
+      response = await chrome.runtime.sendMessage({
+        type: "BACKGROUND",
+        payload: {
+          collection_id: "Ql7C2dPpjkw",
+        },
+      });
+    }, 3 * 60 * 1000);
 
     setInterval(async () => {
       setBackgroundImage(response);
