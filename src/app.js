@@ -7,7 +7,7 @@ import getDate from "./date";
 import greet from "./greet";
 import getQuote from "./quote";
 import getWallpaperIndex from "./wallpaper";
-import { getName, saveName } from "./storage";
+import { fetchName, saveName } from "./storage";
 
 (function () {
   function setTime() {
@@ -59,13 +59,13 @@ import { getName, saveName } from "./storage";
       : `images/${background.index === 0 ? "morning.jpg" : "night.jpg"}`;
 
     image.onload = () => {
-      document.body.style.transition = `background 5s ease`;
+      document.body.style.transition = `background 4s ease-in-out`;
       document.body.style.backgroundImage = `url('${image.src}')`;
     };
   }
 
   async function setupDashboard() {
-    let name = await getName();
+    let name = await fetchName();
     if (!name) name = prompt("Enter your name");
     setDay();
     setDate();
