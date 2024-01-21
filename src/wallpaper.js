@@ -1,4 +1,4 @@
-import proxy from "./proxy.json"
+import proxy from "./proxy.json";
 function getWallpaperIndex(urls = []) {
   const today = new Date();
   const hours = today.getHours();
@@ -33,6 +33,17 @@ export function getUnsplashCollection(collectionId) {
       reject(error);
     }
   });
+}
+
+export function createSolidBackgroundImage(color) {
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  ctx.fillStyle = color;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  return canvas.toDataURL();
 }
 
 export default getWallpaperIndex;

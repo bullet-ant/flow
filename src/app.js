@@ -39,7 +39,8 @@ import { getName, saveName } from "./storage";
   async function setQuote() {
     const res = await getQuote();
 
-    document.getElementById("quote").innerHTML = `"${res.quote}"`;
+    document.getElementById("quote-text").innerHTML = `"${res.quote}"`;
+    document.getElementById("quote-author").innerHTML = `${res.author}`;
   }
 
   async function setWeather(data) {
@@ -52,17 +53,14 @@ import { getName, saveName } from "./storage";
   function setBackgroundImage(urls = []) {
     const background = getWallpaperIndex(urls);
 
-    document.body.style.backgroundColor = "#333";
-
     const image = new Image();
     image.src = background.external
       ? urls[background.index]
-      : `images/${background.index === 0 ? "morning.jpeg" : "night.jpeg"}`;
+      : `images/${background.index === 0 ? "morning.jpg" : "night.jpg"}`;
 
     image.onload = () => {
+      document.body.style.transition = `background 5s ease`;
       document.body.style.backgroundImage = `url('${image.src}')`;
-      document.body.style.transition = `background 0.5s ease-in`;
-      document.body.style.backgroundColor = `transparent`;
     };
   }
 
@@ -115,7 +113,7 @@ import { getName, saveName } from "./storage";
 
     setInterval(async () => {
       setBackgroundImage(response);
-    }, 6 * 60 * 1000);
+    }, 3 * 60 * 1000);
   })();
 
   (async () => {
