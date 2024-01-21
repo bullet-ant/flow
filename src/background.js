@@ -9,7 +9,7 @@ import { getUnsplashCollection } from "./wallpaper";
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type === "GREETINGS") {
-    const message = `Hi Ove, my name is Bac. I am from Background. It's great to hear from you.`;
+    const message = `I am from Background. It's great to hear from you.`;
 
     // Log message coming from the `request` parameter
     console.log(request.payload.message);
@@ -19,7 +19,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     });
   }
 
-  if (request.type === "BACKGROUND") {
+  if (request.type === "WALLPAPER") {
     (async () => {
       const result = await getUnsplashCollection(request.payload.collection_id);
       sendResponse(result);

@@ -44,10 +44,25 @@ import { fetchName, saveName } from "./storage";
   }
 
   async function setWeather(data) {
+    const weatherIcon = document.createElement("img");
+    weatherIcon.src = data.icon;
+    weatherIcon.alt = "Weather Icon";
+    weatherIcon.style.width = "2rem";
+    weatherIcon.style.height = "2rem";
+    const container = document.getElementById("weather-icon");
+
+    container.innerHTML = "";
+    container.appendChild(weatherIcon);
+
     document.getElementById("temperature").innerHTML = `${data.temp}&deg;C`;
+    document.getElementById("weather-description").innerHTML = `${
+      data.description[0].toUpperCase() + data.description.slice(1)
+    }`;
+
     document.getElementById(
-      "location"
-    ).innerHTML = `${data.city}, ${data.country}`;
+      "weather"
+    ).style.transition = `opacity 0.4s cubic-bezier(0.4, 0, 1, 1)`;
+    document.getElementById("weather").style.opacity = 1;
   }
 
   function setBackgroundImage(urls = []) {
@@ -59,7 +74,7 @@ import { fetchName, saveName } from "./storage";
       : `images/${background.index === 0 ? "morning.jpg" : "night.jpg"}`;
 
     image.onload = () => {
-      document.body.style.transition = `background 4s ease-in-out`;
+      document.body.style.transition = `background 6s ease-in-out`;
       document.body.style.backgroundImage = `url('${image.src}')`;
     };
   }
@@ -85,7 +100,7 @@ import { fetchName, saveName } from "./storage";
     {
       type: "GREETINGS",
       payload: {
-        message: "Hello, my name is Ove. I am from Override app.",
+        message: "Hello, I'm from Main.",
       },
     },
     (response) => {
@@ -96,7 +111,7 @@ import { fetchName, saveName } from "./storage";
   // Get background images from worker
   (async () => {
     let response = await chrome.runtime.sendMessage({
-      type: "BACKGROUND",
+      type: "WALLPAPER",
       payload: {
         collection_id: "Ql7C2dPpjkw",
       },
@@ -104,7 +119,7 @@ import { fetchName, saveName } from "./storage";
 
     setInterval(async () => {
       response = await chrome.runtime.sendMessage({
-        type: "BACKGROUND",
+        type: "WALLPAPER",
         payload: {
           collection_id: "Ql7C2dPpjkw",
         },
