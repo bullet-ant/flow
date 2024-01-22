@@ -60,8 +60,8 @@ body {
 .weather-description {
   text-align: center;
   font-size: 0.85rem;
-  max-width: 90px;
-  min-width: 86px;
+  max-width: 120px;
+  min-width: 90px;
 }
 
 .day {
