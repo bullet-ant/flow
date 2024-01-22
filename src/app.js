@@ -8,6 +8,7 @@ import greet from "./greet";
 import getQuote from "./quote";
 import getWallpaperIndex from "./wallpaper";
 import { fetchName, saveName } from "./storage";
+import getAffirmations from "./affirmations";
 
 (function () {
   function setTime() {
@@ -34,6 +35,19 @@ import { fetchName, saveName } from "./storage";
     document.getElementById("greet").innerHTML = message;
 
     saveName(name);
+  }
+
+  async function setAffirmation(name) {
+    let message = "";
+    const affirmation = await getAffirmations();
+
+    if (affirmation.long) message = `${affirmation.affirmation}.`;
+    else
+      message = `${affirmation.affirmation}, ${
+        name.charAt(0).toUpperCase() + name.slice(1)
+      }.`;
+
+    document.getElementById("greet").innerHTML = message;
   }
 
   async function setQuote() {
@@ -90,6 +104,9 @@ import { fetchName, saveName } from "./storage";
     setQuote();
 
     setInterval(setTime, 1000);
+    setInterval(() => {
+      setAffirmation(name);
+    }, 20 * 1000);
     setInterval(setGreetings, 60 * 60 * 1000);
     setInterval(setQuote, 12 * 60 * 60 * 1000);
   }
