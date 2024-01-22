@@ -10,7 +10,7 @@ function getWallpaperIndex(urls = []) {
 
   return {
     external: false,
-    index: hours < 12 ? 0 : 1,
+    index: hours < 16 ? 0 : 1,
   };
 }
 

@@ -6,7 +6,7 @@ function greet(name) {
 
   if (hours < 12) {
     message = "morning";
-  } else if (hours > 12 && hours < 17) {
+  } else if (hours >= 12 && hours < 17) {
     message = "afternoon";
   } else {
     message = "evening";

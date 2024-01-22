@@ -44,22 +44,21 @@ body {
 }
 
 .weather-temperature {
-  position: relative;
   display: flex;
   justify-content: center;
 }
 
 .weather-icon {
-  position: absolute;
-  top: -0.5rem;
-  left: 0.5rem;
+  height: 1rem;
+  transform: translateY(-0.5rem);
 }
 
 .temperature {
-  transform: translateX(0.5rem);
+  font-size: 1rem;
 }
 
 .weather-description {
+  text-align: center;
   font-size: 0.85rem;
   max-width: 90px;
   min-width: 86px;
