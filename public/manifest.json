@@ -4,7 +4,7 @@
   "$schema": "https://json.schemastore.org/chrome-manifest.json",
   "version": "0.1.0",
   "description": "Transform your new tab page into a personalized dashboard, designed to seamlessly maintain your Flow.",
-  "host_permissions": ["http://*/", "https://*/"],
+  "host_permissions": ["https://flow-server-kappa.vercel.app/api/*"],
   "permissions": ["storage"],
   "icons": {
     "16": "icons/icon_16.png",
