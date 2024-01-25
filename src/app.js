@@ -10,6 +10,13 @@ import getWallpaperIndex from "./wallpaper";
 import { fetchName, saveName } from "./storage";
 import getAffirmations from "./affirmations";
 
+const WALLPAPER_REFRESH_TIME = 30 * 60 * 1000; // 30 minutes
+const WALLPAPER_LIST_REFRESH_TIME = 3 * 60 * 60 * 1000; // 3 hour
+const WEATHER_REFRESH_TIME = 60 * 60 * 1000; // 1 hour
+const GREETINGS_REFRESH_TIME = 60 * 60 * 1000; // 1 hour
+const AFFIRMATION_REFRESH_TIME = 30 * 1000; // 30 seconds
+const QUOTES_REFRESH_TIME = 10 * 1000; // 1 day
+
 (function () {
   function setTime() {
     const time = getCurrentTime();
@@ -38,6 +45,11 @@ import getAffirmations from "./affirmations";
   }
 
   async function setAffirmation(name) {
+    const greetElement = document.getElementById("greet");
+
+    greetElement.classList.remove("greeting");
+    greetElement.classList.add("greeting-fade-out");
+
     let message = "";
     const affirmation = await getAffirmations();
 
@@ -47,7 +59,11 @@ import getAffirmations from "./affirmations";
         name.charAt(0).toUpperCase() + name.slice(1)
       }.`;
 
-    document.getElementById("greet").innerHTML = message;
+    setTimeout(() => {
+      greetElement.innerHTML = message;
+      greetElement.classList.remove("greeting-fade-out");
+      greetElement.classList.add("greeting");
+    }, 1000);
   }
 
   async function setQuote() {
@@ -106,26 +122,15 @@ import getAffirmations from "./affirmations";
     setInterval(setTime, 1000);
     setInterval(() => {
       setAffirmation(name);
-    }, 20 * 1000);
-    setInterval(setGreetings, 60 * 60 * 1000);
-    setInterval(setQuote, 12 * 60 * 60 * 1000);
+    }, AFFIRMATION_REFRESH_TIME);
+    setInterval(() => {
+      setGreetings(name);
+    }, GREETINGS_REFRESH_TIME);
+    setInterval(setQuote, QUOTES_REFRESH_TIME);
   }
 
   setupDashboard();
 
-  chrome.runtime.sendMessage(
-    {
-      type: "GREETINGS",
-      payload: {
-        message: "Hello, I'm from Main.",
-      },
-    },
-    (response) => {
-      console.log(response.message);
-    }
-  );
-
-  // Get background images from worker
   (async () => {
     let response = await chrome.runtime.sendMessage({
       type: "WALLPAPER",
@@ -137,15 +142,12 @@ import getAffirmations from "./affirmations";
     setInterval(async () => {
       response = await chrome.runtime.sendMessage({
         type: "WALLPAPER",
-        payload: {
-          collection_id: "Ql7C2dPpjkw",
-        },
       });
-    }, 3 * 60 * 1000);
+    }, WALLPAPER_LIST_REFRESH_TIME);
 
     setInterval(async () => {
       setBackgroundImage(response);
-    }, 3 * 60 * 1000);
+    }, WALLPAPER_REFRESH_TIME);
   })();
 
   (async () => {
@@ -159,6 +161,6 @@ import getAffirmations from "./affirmations";
         type: "WEATHER",
       });
       setWeather(response);
-    }, 60 * 60 * 1000);
+    }, WEATHER_REFRESH_TIME);
   })();
 })();

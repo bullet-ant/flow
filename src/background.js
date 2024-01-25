@@ -8,20 +8,9 @@ import { getUnsplashCollection } from "./wallpaper";
 // See https://developer.chrome.com/extensions/background_pages
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.type === "GREETINGS") {
-    const message = `I am from Background. It's great to hear from you.`;
-
-    // Log message coming from the `request` parameter
-    console.log(request.payload.message);
-    // Send a response message
-    sendResponse({
-      message,
-    });
-  }
-
   if (request.type === "WALLPAPER") {
     (async () => {
-      const result = await getUnsplashCollection(request.payload.collection_id);
+      const result = await getUnsplashCollection();
       sendResponse(result);
     })();
 

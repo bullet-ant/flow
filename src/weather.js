@@ -11,8 +11,7 @@ async function getWeather() {
       return processWeatherData(cachedWeather);
     }
 
-    const ip = await getIpAddress();
-    const weatherData = await fetchLiveWeather(ip);
+    const weatherData = await fetchLiveWeather();
 
     weatherData["timestamp"] = new Date().getTime();
 
@@ -31,19 +30,8 @@ function isWeatherCacheValid(cachedWeather) {
   return timeDifference < CACHE_EXPIRATION_TIME;
 }
 
-async function getIpAddress() {
-  const ipResponse = await fetch("https://api64.ipify.org/?format=json");
-
-  if (!ipResponse.ok) {
-    throw new Error(`HTTP error! Status: ${ipResponse.status}`);
-  }
-
-  const ipData = await ipResponse.json();
-  return ipData.ip;
-}
-
-async function fetchLiveWeather(ip) {
-  const weatherResponse = await fetch(`${proxy.endpoint}/weather?ip=${ip}`);
+async function fetchLiveWeather() {
+  const weatherResponse = await fetch(`${proxy.endpoint}/weather`);
 
   if (!weatherResponse.ok) {
     throw new Error(`HTTP error! Status: ${weatherResponse.status}`);
@@ -78,19 +66,19 @@ function getIcon(id) {
   if (id > 600 && id < 700) return "13d";
   if (id > 700 && id < 800) return "50d";
   if (id === 800) {
-    if (hours < 12) return "01d";
+    if (hours < 17) return "01d";
     else return "01n";
   }
   if (id === 801) {
-    if (hours < 12) return "02d";
+    if (hours < 17) return "02d";
     else return "02n";
   }
   if (id === 802) {
-    if (hours < 12) return "03d";
+    if (hours < 17) return "03d";
     else return "03n";
   }
   if (id === 803 || id === 804) {
-    if (hours < 12) return "04d";
+    if (hours < 17) return "04d";
     else return "04n";
   }
 }

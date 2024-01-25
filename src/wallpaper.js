@@ -14,11 +14,11 @@ function getWallpaperIndex(urls = []) {
   };
 }
 
-export function getUnsplashCollection(collectionId) {
+export function getUnsplashCollection() {
   return new Promise(async (resolve, reject) => {
     try {
       const unsplashResponse = await fetch(
-        `${proxy.endpoint}/wallpaper?collection_id=${collectionId}`
+        `${proxy.endpoint}/wallpaper`
       );
 
       if (!unsplashResponse.ok) {

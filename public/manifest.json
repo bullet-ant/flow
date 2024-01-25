@@ -1,10 +1,9 @@
 {
   "manifest_version": 3,
   "name": "Flow",
-  "$schema": "https://json.schemastore.org/chrome-manifest.json",
   "version": "0.1.0",
   "description": "Transform your new tab page into a personalized dashboard, designed to seamlessly maintain your Flow.",
-  "host_permissions": ["https://flow-server-kappa.vercel.app/api/*"],
+  "host_permissions": ["https://flow-server-kappa.vercel.app/api/*", "https://openweathermap.org/img/wn/*"],
   "permissions": ["storage"],
   "icons": {
     "16": "icons/icon_16.png",
