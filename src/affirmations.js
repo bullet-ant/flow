@@ -1,7 +1,11 @@
 import list from "./affirmations.json";
-async function getAffirmations() {
+async function getAffirmations(currentAffirmation) {
   const affirmations = list.affirmations;
-  const index = Math.ceil(Math.random() * 10) % affirmations.length;
+  let index = Math.ceil(Math.random() * 10) % affirmations.length;
+  if (affirmations[index] === currentAffirmation) {
+    if (index === affirmations.length) index = 0;
+    else index += 1;
+  }
   const affirmation = affirmations[index];
 
   return {

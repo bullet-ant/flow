@@ -1,25 +1,9 @@
 import proxy from "./proxy.json";
-function getWallpaperIndex(urls = []) {
-  const today = new Date();
-  const hours = today.getHours();
-  if (urls.length)
-    return {
-      external: true,
-      index: Math.ceil(Math.random() * 10) % urls.length,
-    };
-
-  return {
-    external: false,
-    index: hours < 16 ? 0 : 1,
-  };
-}
 
 export function getUnsplashCollection() {
   return new Promise(async (resolve, reject) => {
     try {
-      const unsplashResponse = await fetch(
-        `${proxy.endpoint}/wallpaper`
-      );
+      const unsplashResponse = await fetch(`${proxy.endpoint}/wallpaper`);
 
       if (!unsplashResponse.ok) {
         throw new Error(`HTTP error! Status: ${unsplashResponse.status}`);
@@ -27,7 +11,31 @@ export function getUnsplashCollection() {
 
       const unsplashData = await unsplashResponse.json();
 
-      resolve(unsplashData.map((photo) => photo.urls.full));
+      resolve(
+        unsplashData.map((photo) => ({ id: photo.id, url: photo.urls.full }))
+      );
+    } catch (error) {
+      console.error("Error fetching wallpapers:", error);
+      reject(error);
+    }
+  });
+}
+
+export async function getViewLocation(id = null) {
+  if (id == false) return;
+  return new Promise(async (resolve, reject) => {
+    try {
+      const unsplashResponse = await fetch(
+        `${proxy.endpoint}/location?id=${id}`
+      );
+
+      if (!unsplashResponse.ok) {
+        throw new Error(`HTTP error! Status: ${unsplashResponse.status}`);
+      }
+
+      const viewLocation = await unsplashResponse.json();
+
+      resolve(viewLocation);
     } catch (error) {
       console.error("Error fetching wallpapers:", error);
       reject(error);
@@ -45,5 +53,3 @@ export function createSolidBackgroundImage(color) {
 
   return canvas.toDataURL();
 }
-
-export default getWallpaperIndex;

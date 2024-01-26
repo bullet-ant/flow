@@ -6,16 +6,13 @@ import getDay from "./day";
 import getDate from "./date";
 import greet from "./greet";
 import getQuote from "./quote";
-import getWallpaperIndex from "./wallpaper";
 import { fetchName, saveName } from "./storage";
 import getAffirmations from "./affirmations";
 
-const WALLPAPER_REFRESH_TIME = 30 * 60 * 1000; // 30 minutes
-const WALLPAPER_LIST_REFRESH_TIME = 3 * 60 * 60 * 1000; // 3 hour
+const WALLPAPER_REFRESH_TIME = 3 * 60 * 1000; // 3 minutes
 const WEATHER_REFRESH_TIME = 60 * 60 * 1000; // 1 hour
 const GREETINGS_REFRESH_TIME = 60 * 60 * 1000; // 1 hour
-const AFFIRMATION_REFRESH_TIME = 30 * 1000; // 30 seconds
-const QUOTES_REFRESH_TIME = 10 * 1000; // 1 day
+const AFFIRMATION_REFRESH_TIME = 60 * 1000; // 1 minute
 
 (function () {
   function setTime() {
@@ -44,14 +41,14 @@ const QUOTES_REFRESH_TIME = 10 * 1000; // 1 day
     saveName(name);
   }
 
-  async function setAffirmation(name) {
+  async function setAffirmation(name, currentAffirmation) {
     const greetElement = document.getElementById("greet");
 
     greetElement.classList.remove("greeting");
     greetElement.classList.add("greeting-fade-out");
 
     let message = "";
-    const affirmation = await getAffirmations();
+    const affirmation = await getAffirmations(currentAffirmation);
 
     if (affirmation.long) message = `${affirmation.affirmation}.`;
     else
@@ -64,6 +61,8 @@ const QUOTES_REFRESH_TIME = 10 * 1000; // 1 day
       greetElement.classList.remove("greeting-fade-out");
       greetElement.classList.add("greeting");
     }, 1000);
+
+    return affirmation.affirmation;
   }
 
   async function setQuote() {
@@ -95,58 +94,50 @@ const QUOTES_REFRESH_TIME = 10 * 1000; // 1 day
     document.getElementById("weather").style.opacity = 1;
   }
 
-  function setBackgroundImage(urls = []) {
-    const background = getWallpaperIndex(urls);
+  async function setBackgroundImage(external, background) {
+    const { id, url, location } = background;
 
     const image = new Image();
-    image.src = background.external
-      ? urls[background.index]
-      : `images/${background.index === 0 ? "morning.jpg" : "night.jpg"}`;
+    image.src = external
+      ? url
+      : `images/${new Date().getHours() < 18 ? "morning.jpg" : "night.jpg"}`;
 
     image.onload = () => {
       document.body.style.transition = `background 6s ease-in-out`;
       document.body.style.backgroundImage = `url('${image.src}')`;
+
+      if (location) {
+        console.log(location);
+      }
     };
   }
 
   async function setupDashboard() {
+    let currentAffirmation = null;
     let name = await fetchName();
     if (!name) name = prompt("Enter your name");
+
     setDay();
     setDate();
     setTime();
-    setBackgroundImage();
+    setBackgroundImage(false, []);
     setGreetings(name);
     setQuote();
 
     setInterval(setTime, 1000);
     setInterval(() => {
-      setAffirmation(name);
+      currentAffirmation = setAffirmation(name, currentAffirmation);
     }, AFFIRMATION_REFRESH_TIME);
-    setInterval(() => {
-      setGreetings(name);
-    }, GREETINGS_REFRESH_TIME);
-    setInterval(setQuote, QUOTES_REFRESH_TIME);
   }
 
   setupDashboard();
 
   (async () => {
-    let response = await chrome.runtime.sendMessage({
-      type: "WALLPAPER",
-      payload: {
-        collection_id: "Ql7C2dPpjkw",
-      },
-    });
-
     setInterval(async () => {
-      response = await chrome.runtime.sendMessage({
+      const response = await chrome.runtime.sendMessage({
         type: "WALLPAPER",
       });
-    }, WALLPAPER_LIST_REFRESH_TIME);
-
-    setInterval(async () => {
-      setBackgroundImage(response);
+      setBackgroundImage(true, response);
     }, WALLPAPER_REFRESH_TIME);
   })();
 

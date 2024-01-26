@@ -1,7 +1,7 @@
 "use strict";
 
 import getWeather from "./weather";
-import { getUnsplashCollection } from "./wallpaper";
+import { getUnsplashCollection, getViewLocation } from "./wallpaper";
 
 // With background scripts you can communicate extension files.
 // For more information on background script,
@@ -10,8 +10,15 @@ import { getUnsplashCollection } from "./wallpaper";
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type === "WALLPAPER") {
     (async () => {
-      const result = await getUnsplashCollection();
-      sendResponse(result);
+      const collections = await getUnsplashCollection();
+
+      const index = Math.ceil(Math.random() * 10) % collections.length;
+      const url = collections[index].url;
+      const id = collections[index].id;
+
+      const locationInfo = await getViewLocation(id);
+
+      sendResponse({ id, location: locationInfo.location, url });
     })();
 
     return true;
