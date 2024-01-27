@@ -15,7 +15,7 @@ import {
 import getAffirmations from "./affirmations";
 import defaultWallpapers from "./default-wallpapers.json";
 
-const WALLPAPER_REFRESH_TIME = 20 * 1000; // 3 minutes
+const WALLPAPER_REFRESH_TIME = 3 * 60 * 1000; // 3 minutes
 const WEATHER_REFRESH_TIME = 60 * 60 * 1000; // 1 hour
 const AFFIRMATION_REFRESH_TIME = 30 * 1000; // 30 seconds
 
