@@ -15,7 +15,7 @@ import {
 import getAffirmations from "./affirmations";
 import defaultWallpapers from "./default-wallpapers.json";
 
-const WALLPAPER_REFRESH_TIME = 10 * 1000; // 3 minutes
+const WALLPAPER_REFRESH_TIME = 20 * 1000; // 3 minutes
 const WEATHER_REFRESH_TIME = 60 * 60 * 1000; // 1 hour
 const AFFIRMATION_REFRESH_TIME = 30 * 1000; // 30 seconds
 
@@ -117,7 +117,7 @@ const AFFIRMATION_REFRESH_TIME = 30 * 1000; // 30 seconds
     const existingGuessLocation = document.getElementById("guess-location");
 
     if (existingGuessLocation) existingGuessLocation.remove();
-  
+
     const guessLocationDiv = document.createElement("div");
     guessLocationDiv.className = "guess-location";
     guessLocationDiv.id = "guess-location";
@@ -162,6 +162,20 @@ const AFFIRMATION_REFRESH_TIME = 30 * 1000; // 30 seconds
     document.body.appendChild(attributesDiv);
   }
 
+  function celebrate() {
+    let canvas = document.createElement("canvas");
+    canvas.height = innerHeight * 2;
+    canvas.width = innerWidth * 2;
+    let container = document.getElementById("celebrate");
+
+    container.appendChild(canvas);
+
+    let celebration = confetti.create(canvas);
+    celebration({
+      angle: 55,
+    }).then(() => container.removeChild(canvas));
+  }
+
   async function setBackgroundImage(external, background) {
     let id, url, location, attributes;
 
@@ -204,14 +218,16 @@ const AFFIRMATION_REFRESH_TIME = 30 * 1000; // 30 seconds
           const searchSpace = [
             location.city?.toLowerCase(),
             location.country?.toLowerCase(),
-            ...location.name?.split(",").map(part => part.trim().toLowerCase())
+            ...location.name
+              ?.split(",")
+              .map((part) => part.trim().toLowerCase()),
           ];
           console.log(searchSpace);
 
           if (searchSpace.includes(guess.toLowerCase())) {
             updateAttribution(location.name, false);
             document.getElementById("guess-location").remove();
-
+            celebrate();
             saveAttribution(id);
           } else {
             const guessMessage = document.getElementById("guess");
