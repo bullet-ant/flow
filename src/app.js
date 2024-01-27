@@ -99,9 +99,13 @@ const AFFIRMATION_REFRESH_TIME = 30 * 1000; // 30 seconds
     document.getElementById("weather").style.opacity = 1;
   }
 
-  async function updateAttribution(location) {
+  async function updateAttribution(location, existing) {
     const attributes = document.getElementById("attribute");
     const photoLocation = document.createElement("p");
+    if (!existing) {
+      photoLocation.style.opacity = 0;
+      photoLocation.style.animation = "fade-in 1.2s ease forwards";
+    }
     photoLocation.id = "photo-location";
     photoLocation.innerHTML = location;
     photoLocation.style.marginBottom = "0.2rem";
@@ -111,11 +115,9 @@ const AFFIRMATION_REFRESH_TIME = 30 * 1000; // 30 seconds
 
   function createGuessLocationElement() {
     const existingGuessLocation = document.getElementById("guess-location");
-    const photoLocationAttribute = document.getElementById("photo-location");
 
     if (existingGuessLocation) existingGuessLocation.remove();
-    if (photoLocationAttribute) photoLocationAttribute.remove();
-
+  
     const guessLocationDiv = document.createElement("div");
     guessLocationDiv.className = "guess-location";
     guessLocationDiv.id = "guess-location";
@@ -188,14 +190,13 @@ const AFFIRMATION_REFRESH_TIME = 30 * 1000; // 30 seconds
 
       const alreadyAttributed = await fetchAttribution(id);
       if (alreadyAttributed) {
-        updateAttribution(location.name);
-
+        updateAttribution(location.name, true);
         return;
       }
 
       createGuessLocationElement();
 
-      // Guess the location
+      // Events when user guesses a location
       const input = document.getElementById("guess-location-input");
       input.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
@@ -203,10 +204,12 @@ const AFFIRMATION_REFRESH_TIME = 30 * 1000; // 30 seconds
           const searchSpace = [
             location.city?.toLowerCase(),
             location.country?.toLowerCase(),
+            ...location.name?.split(",").map(part => part.trim().toLowerCase())
           ];
+          console.log(searchSpace);
 
           if (searchSpace.includes(guess.toLowerCase())) {
-            updateAttribution(location.name);
+            updateAttribution(location.name, false);
             document.getElementById("guess-location").remove();
 
             saveAttribution(id);
