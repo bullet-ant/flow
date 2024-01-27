@@ -142,6 +142,46 @@ body {
   opacity: 1;
 }
 
+.guess-location {
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  position: absolute;
+  bottom: 2rem;
+  left: 0;
+  text-align: left;
+  margin-left: 1.5rem;
+  animation: fade-in 1.2s ease 2s forwards;
+  font-size: 0.8rem;
+}
+
+.guess-location-input {
+  appearance: none;
+  border: none;
+  outline: none;
+  border-bottom: 0.1em solid #ffffffc0;
+  background: transparent;
+  padding: 0.3em 0;
+  margin-bottom: 0.4em;
+  color: #fff;
+  width: 7.3rem;
+}
+
+.attribute {
+  opacity: 0;
+  position: absolute;
+  bottom: 2rem;
+  right: 0;
+  text-align: right;
+  margin-right: 1.5rem;
+  animation: fade-in 1.2s ease 2s forwards;
+  font-size: 0.8rem;
+}
+
+.attribute a {
+  color: #fff;
+}
+
 @keyframes fade-in {
   0% {
     opacity: 0;

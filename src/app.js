@@ -8,11 +8,11 @@ import greet from "./greet";
 import getQuote from "./quote";
 import { fetchName, saveName } from "./storage";
 import getAffirmations from "./affirmations";
+import defaultWallpapers from "./default-wallpapers.json";
 
 const WALLPAPER_REFRESH_TIME = 3 * 60 * 1000; // 3 minutes
 const WEATHER_REFRESH_TIME = 60 * 60 * 1000; // 1 hour
-const GREETINGS_REFRESH_TIME = 60 * 60 * 1000; // 1 hour
-const AFFIRMATION_REFRESH_TIME = 60 * 1000; // 1 minute
+const AFFIRMATION_REFRESH_TIME = 30 * 1000; // 30 seconds
 
 (function () {
   function setTime() {
@@ -94,21 +94,116 @@ const AFFIRMATION_REFRESH_TIME = 60 * 1000; // 1 minute
     document.getElementById("weather").style.opacity = 1;
   }
 
+  async function updateAttribution(location) {
+    const attributes = document.getElementById("attribute");
+    const photoLocation = document.createElement("p");
+    photoLocation.id = "photo-location";
+    photoLocation.innerHTML = location;
+    photoLocation.style.marginBottom = "0.2rem";
+
+    attributes.insertBefore(photoLocation, attributes.firstChild);
+  }
+
+  function createGuessLocationElement() {
+    const existingGuessLocation = document.getElementById("guess-location");
+    const photoLocationAttribute = document.getElementById("photo-location");
+
+    if (existingGuessLocation) existingGuessLocation.remove();
+    if (photoLocationAttribute) photoLocationAttribute.remove();
+
+    const guessLocationDiv = document.createElement("div");
+    guessLocationDiv.className = "guess-location";
+    guessLocationDiv.id = "guess-location";
+
+    const inputElement = document.createElement("input");
+    inputElement.type = "text";
+    inputElement.className = "guess-location-input";
+    inputElement.id = "guess-location-input";
+
+    const guessParagraph = document.createElement("p");
+    guessParagraph.id = "guess";
+    guessParagraph.textContent = "Guess this location?";
+
+    guessLocationDiv.appendChild(inputElement);
+    guessLocationDiv.appendChild(guessParagraph);
+
+    document.body.appendChild(guessLocationDiv);
+  }
+
+  function createAttributesElement(attributes) {
+    console.log(attributes);
+    const existingAttributesDiv = document.getElementById("attribute");
+    if (existingAttributesDiv) existingAttributesDiv.remove();
+
+    const attributesDiv = document.createElement("div");
+    attributesDiv.className = "attribute";
+    attributesDiv.id = "attribute";
+
+    const imageAttribute = document.createElement("a");
+    imageAttribute.href = attributes.image;
+    imageAttribute.textContent = "Unsplash";
+
+    const userAttribute = document.createElement("a");
+    userAttribute.href = attributes.user.link;
+    userAttribute.textContent = attributes.user.name;
+
+    attributesDiv.innerHTML =
+      userAttribute.outerHTML + " | " + imageAttribute.outerHTML;
+
+    document.body.appendChild(attributesDiv);
+  }
+
   async function setBackgroundImage(external, background) {
-    const { id, url, location } = background;
+    let id, url, location, attributes;
+
+    if (external) {
+      ({ id, url, location, attributes } = background);
+    } else {
+      const hours = new Date().getHours();
+      let background = {};
+      if (hours > 4 && hours < 12) {
+        background = defaultWallpapers.morning;
+      } else if (hours >= 12 && hours <= 16) {
+        background = defaultWallpapers.afternoon;
+      } else {
+        background = defaultWallpapers.night;
+      }
+      ({ id, url, location, attributes } = background);
+    }
 
     const image = new Image();
-    image.src = external
-      ? url
-      : `images/${new Date().getHours() < 18 ? "morning.jpg" : "night.jpg"}`;
-
+    image.src = url;
     image.onload = () => {
-      document.body.style.transition = `background 6s ease-in-out`;
+      document.body.style.transition = `background 5s ease-in-out`;
       document.body.style.backgroundImage = `url('${image.src}')`;
 
-      if (location) {
-        console.log(location);
-      }
+      createGuessLocationElement();
+      createAttributesElement(attributes);
+
+      // Guess the location
+      const input = document.getElementById("guess-location-input");
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          const guess = e.target.value;
+          const searchSpace = [
+            location.city?.toLowerCase(),
+            location.country?.toLowerCase(),
+          ];
+
+          if (searchSpace.includes(guess.toLowerCase())) {
+            updateAttribution(location.name);
+            document.getElementById("guess-location").remove();
+          } else {
+            const guessMessage = document.getElementById("guess");
+            guessMessage.innerHTML = "Try again!";
+            input.select();
+
+            setTimeout(() => {
+              guessMessage.innerHTML = "Guess the location?";
+            }, 5000);
+          }
+        }
+      });
     };
   }
 

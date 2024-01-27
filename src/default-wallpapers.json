@@ -1,0 +1,53 @@
+{
+  "morning": {
+    "id": "VWxiaKn-lVc",
+    "location": {
+      "name": "Jamnik, Slovenia",
+      "city": "Jamnik",
+      "country": "Slovenia",
+      "position": { "latitude": 46.2702849, "longitude": 14.207148 }
+    },
+    "url": "images/morning.jpg",
+    "attributes": {
+      "image": "https://unsplash.com/photos/overlooking-view-of-mountains-and-sunrise-VWxiaKn-lVc",
+      "user": {
+        "name": "Tadej Skofic",
+        "link": "https://unsplash.com/@tadej"
+      }
+    }
+  },
+  "afternoon": {
+    "id": "tvPvROBv0F4",
+    "location": {
+      "name": "Millennium Bridge, London, United Kingdom",
+      "city": "London",
+      "country": "United Kingdom",
+      "position": { "latitude": 51.5095291, "longitude": -0.0985425000000077 }
+    },
+    "url": "images/afternoon.jpg",
+    "attributes": {
+      "image": "https://unsplash.com/photos/a-view-of-st-pauls-cathedral-from-the-millennium-bridge-in-london-tvPvROBv0F4",
+      "user": {
+        "name": "James Padolsey",
+        "link": "https://unsplash.com/@padolsey"
+      }
+    }
+  },
+  "night": {
+    "id": "3s85IxVDyXE",
+    "location": {
+      "name": "Nanga Parbat",
+      "city": "Kashmir",
+      "country": "India",
+      "position": { "latitude": null, "longitude": null }
+    },
+    "url": "images/night.jpg",
+    "attributes": {
+      "image": "https://unsplash.com/photos/snow-capped-mountain-at-night-3s85IxVDyXE",
+      "user": {
+        "name": "Haseeb Jamil",
+        "link": "https://unsplash.com/@haseebjkhan"
+      }
+    }
+  }
+}

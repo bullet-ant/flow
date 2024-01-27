@@ -15,10 +15,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       const index = Math.ceil(Math.random() * 10) % collections.length;
       const url = collections[index].url;
       const id = collections[index].id;
+      const attributes = collections[index].attributes;
 
       const locationInfo = await getViewLocation(id);
 
-      sendResponse({ id, location: locationInfo.location, url });
+      sendResponse({ id, location: locationInfo.location, url, attributes });
     })();
 
     return true;
