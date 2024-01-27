@@ -6,11 +6,16 @@ import getDay from "./day";
 import getDate from "./date";
 import greet from "./greet";
 import getQuote from "./quote";
-import { fetchName, saveName } from "./storage";
+import {
+  fetchAttribution,
+  fetchName,
+  saveAttribution,
+  saveName,
+} from "./storage";
 import getAffirmations from "./affirmations";
 import defaultWallpapers from "./default-wallpapers.json";
 
-const WALLPAPER_REFRESH_TIME = 3 * 60 * 1000; // 3 minutes
+const WALLPAPER_REFRESH_TIME = 10 * 1000; // 3 minutes
 const WEATHER_REFRESH_TIME = 60 * 60 * 1000; // 1 hour
 const AFFIRMATION_REFRESH_TIME = 30 * 1000; // 30 seconds
 
@@ -131,7 +136,9 @@ const AFFIRMATION_REFRESH_TIME = 30 * 1000; // 30 seconds
   }
 
   function createAttributesElement(attributes) {
-    console.log(attributes);
+    const existingGuessLocation = document.getElementById("guess-location");
+    if (existingGuessLocation) existingGuessLocation.remove();
+
     const existingAttributesDiv = document.getElementById("attribute");
     if (existingAttributesDiv) existingAttributesDiv.remove();
 
@@ -173,12 +180,20 @@ const AFFIRMATION_REFRESH_TIME = 30 * 1000; // 30 seconds
 
     const image = new Image();
     image.src = url;
-    image.onload = () => {
+    image.onload = async () => {
       document.body.style.transition = `background 5s ease-in-out`;
       document.body.style.backgroundImage = `url('${image.src}')`;
 
-      createGuessLocationElement();
       createAttributesElement(attributes);
+
+      const alreadyAttributed = await fetchAttribution(id);
+      if (alreadyAttributed) {
+        updateAttribution(location.name);
+
+        return;
+      }
+
+      createGuessLocationElement();
 
       // Guess the location
       const input = document.getElementById("guess-location-input");
@@ -193,6 +208,8 @@ const AFFIRMATION_REFRESH_TIME = 30 * 1000; // 30 seconds
           if (searchSpace.includes(guess.toLowerCase())) {
             updateAttribution(location.name);
             document.getElementById("guess-location").remove();
+
+            saveAttribution(id);
           } else {
             const guessMessage = document.getElementById("guess");
             guessMessage.innerHTML = "Try again!";

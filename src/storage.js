@@ -24,3 +24,17 @@ export async function fetchWeather() {
     });
   });
 }
+
+export async function saveAttribution(id) {
+  const attribution = {};
+  attribution[id] = true;
+  chrome.storage.local.set(attribution);
+}
+
+export async function fetchAttribution(id) {
+  return new Promise((resolve) => {
+    chrome.storage.local.get([id], (result) => {
+      resolve(result[id]);
+    });
+  });
+}
