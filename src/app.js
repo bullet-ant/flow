@@ -187,7 +187,7 @@ const AFFIRMATION_REFRESH_TIME = 30 * 1000; // 30 seconds
       if (hours > 4 && hours < 12) {
         background = defaultWallpapers.morning;
       } else if (hours >= 12 && hours <= 16) {
-        background = defaultWallpapers.afternoon;
+        background = defaultWallpapers.morning;
       } else {
         background = defaultWallpapers.night;
       }
