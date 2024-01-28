@@ -11,8 +11,7 @@ import getAffirmations from "./affirmations";
 
 const WALLPAPER_REFRESH_TIME = 3 * 60 * 1000; // 3 minutes
 const WEATHER_REFRESH_TIME = 60 * 60 * 1000; // 1 hour
-const GREETINGS_REFRESH_TIME = 60 * 60 * 1000; // 1 hour
-const AFFIRMATION_REFRESH_TIME = 60 * 1000; // 1 minute
+const AFFIRMATION_REFRESH_TIME = 30 * 1000; // 30 seconds
 
 (function () {
   function setTime() {
@@ -105,10 +104,6 @@ const AFFIRMATION_REFRESH_TIME = 60 * 1000; // 1 minute
     image.onload = () => {
       document.body.style.transition = `background 6s ease-in-out`;
       document.body.style.backgroundImage = `url('${image.src}')`;
-
-      if (location) {
-        console.log(location);
-      }
     };
   }
 

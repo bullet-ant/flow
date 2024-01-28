@@ -12,7 +12,17 @@ export function getUnsplashCollection() {
       const unsplashData = await unsplashResponse.json();
 
       resolve(
-        unsplashData.map((photo) => ({ id: photo.id, url: photo.urls.full }))
+        unsplashData.map((photo) => ({
+          id: photo.id,
+          url: photo.urls.full,
+          attributes: {
+            image: photo.links.html,
+            user: {
+              name: photo.user.name,
+              link: photo.user.links.html,
+            },
+          },
+        }))
       );
     } catch (error) {
       console.error("Error fetching wallpapers:", error);
