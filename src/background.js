@@ -12,7 +12,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     (async () => {
       const collections = await getUnsplashCollection();
 
-      const index = Math.ceil(Math.random() * 10) % collections.length;
+      const index = Math.ceil(Math.random() * collections.length) % collections.length;
       const url = collections[index].url;
       const id = collections[index].id;
       const attributes = collections[index].attributes;
