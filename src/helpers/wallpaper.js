@@ -1,8 +1,6 @@
 const defaultCollection = require("../db/default_wallpapers.json");
 
 function selectRandomWallpaper(collections = defaultCollection) {
-  console.log(collections);
-
   const index =
     Math.ceil(Math.random() * collections.length) % collections.length;
   let url = collections[index].urls.full;

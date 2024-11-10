@@ -1,39 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>New Tab</title>
-    <link rel="stylesheet" href="app.css" />
-  </head>
-  <body>
-    <div class="topbar">
-      <div class="today">
-        <p id="date" class="date"></p>
-        <p id="day" class="day"></p>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>New Tab</title>
+  <link rel="stylesheet" href="app.css" />
+</head>
+
+<body>
+  <div class="topbar">
+    <div class="today">
+      <p id="date" class="date"></p>
+      <p id="day" class="day"></p>
+    </div>
+    <div class="weather" id="weather">
+      <div class="weather-temperature">
+        <div class="weather-icon" id="weather-icon"></div>
+        <div class="temperature" id="temperature"></div>
       </div>
-      <div class="weather" id="weather">
-        <div class="weather-temperature">
-          <div class="weather-icon" id="weather-icon"></div>
-          <div class="temperature" id="temperature"></div>
-        </div>
-        <div class="weather-description" id="weather-description">
-        </div>
+      <div class="weather-description" id="weather-description">
       </div>
     </div>
-    <div class="container">
-      <div id="clock" class="clock"></div>
+  </div>
+  <div class="container">
+    <div id="clock" class="clock"></div>
 
-      <p id="greet" class="greeting"></p>
-      <div class="quote">
-        <div class="quote-text" id="quote-text"></div>
-        <div class="quote-author" id="quote-author"></div>
-      </div>
+    <p id="greet" class="greeting"></p>
+    <div class="quote">
+      <div class="quote-text" id="quote-text"></div>
+      <div class="quote-author" id="quote-author"></div>
     </div>
-    <script src="app.js"></script>
-    <!--
-    This HTML file is a template for overriding pages like New Tab, Bookmarks, or History page.
+  </div>
+  <script src="app.js"></script>
+</body>
 
-    To begin the development, run `npm run watch`.
-    To create a production bundle, use `npm run build`.
-  --></body>
 </html>

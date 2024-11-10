@@ -1,4 +1,4 @@
-import proxy from "./proxy.json";
+import proxy from "./db/proxy.json";
 
 export function getUnsplashCollection() {
   return new Promise(async (resolve, reject) => {
