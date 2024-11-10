@@ -8,6 +8,7 @@ import greet from "./greet";
 import getQuote from "./quote";
 import { fetchName, saveName, fetchImage, saveImage } from "./storage";
 import getAffirmations from "./affirmations";
+import { selectRandomWallpaper } from "./helpers/wallpaper";
 
 const WALLPAPER_REFRESH_TIME = 30 * 1000; // 30 seconds
 const WEATHER_REFRESH_TIME = 60 * 60 * 1000; // 1 hour
@@ -93,31 +94,16 @@ const AFFIRMATION_REFRESH_TIME = 30 * 1000; // 30 seconds
     document.getElementById("weather").style.opacity = 1;
   }
 
-  async function setBackgroundImage(external, background) {
+  async function setBackgroundImage(background) {
     const { id, url, location } = background;
 
-    let imageUrl = external
-      ? url
-      : `images/${new Date().getHours() < 17 ? "morning.jpg" : "night.jpg"}`;
-
-    if (!external) {
-      const cachedImage = await fetchImage();
-      if (cachedImage) {
-        imageUrl = cachedImage;
-      }
-    }
-
     const image = new Image();
-    image.src = imageUrl;
+    image.src = url;
 
     image.onload = () => {
       document.body.style.transition = `background 6s ease-in-out`;
       document.body.style.backgroundImage = `url('${image.src}')`;
     };
-
-    if (external) {
-      await saveImage(url);
-    }
   }
 
   async function setupDashboard() {
@@ -128,7 +114,7 @@ const AFFIRMATION_REFRESH_TIME = 30 * 1000; // 30 seconds
     setDay();
     setDate();
     setTime();
-    setBackgroundImage(false, []);
+    setBackgroundImage(selectRandomWallpaper());
     setGreetings(name);
     setQuote();
 
@@ -145,7 +131,7 @@ const AFFIRMATION_REFRESH_TIME = 30 * 1000; // 30 seconds
       const response = await chrome.runtime.sendMessage({
         type: "WALLPAPER",
       });
-      setBackgroundImage(true, response);
+      setBackgroundImage(response);
     }, WALLPAPER_REFRESH_TIME);
   })();
 
