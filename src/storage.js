@@ -38,3 +38,25 @@ export async function fetchAttribution(id) {
     });
   });
 }
+
+export async function saveImage(url) {
+  const response = await fetch(url);
+  const blob = await response.blob();
+  const reader = new FileReader();
+
+  reader.onloadend = function () {
+    const base64data = reader.result;
+    chrome.storage.local.set({ image: base64data }, function () {});
+  };
+
+  reader.readAsDataURL(blob);
+}
+
+export async function fetchImage() {
+  return new Promise((resolve) => {
+    chrome.storage.local.get(["image"], (result) => {
+      const base64data = result.image || null;
+      resolve(base64data);
+    });
+  });
+}

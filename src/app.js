@@ -6,10 +6,10 @@ import getDay from "./day";
 import getDate from "./date";
 import greet from "./greet";
 import getQuote from "./quote";
-import { fetchName, saveName } from "./storage";
+import { fetchName, saveName, fetchImage, saveImage } from "./storage";
 import getAffirmations from "./affirmations";
 
-const WALLPAPER_REFRESH_TIME = 3 * 60 * 1000; // 3 minutes
+const WALLPAPER_REFRESH_TIME = 30 * 1000; // 30 seconds
 const WEATHER_REFRESH_TIME = 60 * 60 * 1000; // 1 hour
 const AFFIRMATION_REFRESH_TIME = 30 * 1000; // 30 seconds
 
@@ -96,15 +96,28 @@ const AFFIRMATION_REFRESH_TIME = 30 * 1000; // 30 seconds
   async function setBackgroundImage(external, background) {
     const { id, url, location } = background;
 
-    const image = new Image();
-    image.src = external
+    let imageUrl = external
       ? url
-      : `images/${new Date().getHours() < 18 ? "morning.jpg" : "night.jpg"}`;
+      : `images/${new Date().getHours() < 17 ? "morning.jpg" : "night.jpg"}`;
+
+    if (!external) {
+      const cachedImage = await fetchImage();
+      if (cachedImage) {
+        imageUrl = cachedImage;
+      }
+    }
+
+    const image = new Image();
+    image.src = imageUrl;
 
     image.onload = () => {
       document.body.style.transition = `background 6s ease-in-out`;
       document.body.style.backgroundImage = `url('${image.src}')`;
     };
+
+    if (external) {
+      await saveImage(url);
+    }
   }
 
   async function setupDashboard() {
