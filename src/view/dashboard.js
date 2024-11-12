@@ -19,7 +19,7 @@ export async function setupDashboard() {
   setDay();
   setDate();
   setTime();
-  setBackgroundImage(selectRandomWallpaper());
+  setBackgroundImage(await selectRandomWallpaper());
   setGreetings(name);
   setQuote();
 

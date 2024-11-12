@@ -60,3 +60,16 @@ export async function fetchImage() {
     });
   });
 }
+
+export async function saveWallpaperCollection(collections) {
+  chrome.storage.local.set({ collections: collections });
+}
+
+export async function fetchWallpaperCollection() {
+  return new Promise((resolve) => {
+    chrome.storage.local.get(["collections"], (result) => {
+      const collections = result.collections || null;
+      resolve(collections);
+    });
+  });
+}

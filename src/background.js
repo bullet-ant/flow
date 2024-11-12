@@ -27,6 +27,17 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true;
   }
 
+  if (request.type === "UPDATE") {
+    (async () => {
+      console.log("Updating wallpaper collection");
+
+      await getUnsplashCollection();
+
+      sendResponse({ success: true });
+    })();
+
+    return true;
+  }
   if (request.type === "WEATHER") {
     (async () => {
       const result = await getWeather();

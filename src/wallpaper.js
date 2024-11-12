@@ -10,6 +10,7 @@ export function getUnsplashCollection() {
       }
 
       const unsplashData = await unsplashResponse.json();
+      chrome.storage.local.set({ collections: unsplashData });
 
       resolve(
         unsplashData.map((photo) => ({

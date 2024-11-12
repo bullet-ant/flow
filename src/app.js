@@ -34,4 +34,7 @@ const WALLPAPER_REFRESH_INTERVAL = 1000 * 60;
       setWeather(response);
     }, WEATHER_REFRESH_INTERVAL);
   })();
+  (async () => {
+    await chrome.runtime.sendMessage({ type: "UPDATE" });
+  })();
 })();
