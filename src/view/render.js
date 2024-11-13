@@ -92,7 +92,7 @@ export async function setBackgroundImage(background) {
   image.src = url;
 
   image.onload = () => {
-    document.body.style.transition = `background 6s ease-in-out`;
+    document.body.style.transition = `background 4s ease-in-out`;
     document.body.style.backgroundImage = `url('${image.src}')`;
   };
 }

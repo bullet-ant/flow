@@ -7,7 +7,7 @@ import { setBackgroundImage, setWeather } from "./view/render";
 
 // MS * S * M
 const WEATHER_REFRESH_INTERVAL = 1000 * 60 * 60;
-const WALLPAPER_REFRESH_INTERVAL = 1000 * 60;
+const WALLPAPER_REFRESH_INTERVAL = 1000 * 60 * 3;
 
 (function () {
   setupDashboard();
