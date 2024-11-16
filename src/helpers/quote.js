@@ -1,4 +1,4 @@
-import quotes from "./quotes.json";
+import quotes from "../db/quotes.json";
 
 async function getQuote() {
   const now = new Date();

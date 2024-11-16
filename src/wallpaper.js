@@ -1,4 +1,4 @@
-import proxy from "./proxy.json";
+import proxy from "./db/proxy.json";
 
 export function getUnsplashCollection() {
   return new Promise(async (resolve, reject) => {
@@ -10,6 +10,7 @@ export function getUnsplashCollection() {
       }
 
       const unsplashData = await unsplashResponse.json();
+      chrome.storage.local.set({ collections: unsplashData });
 
       resolve(
         unsplashData.map((photo) => ({

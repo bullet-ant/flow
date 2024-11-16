@@ -1,4 +1,4 @@
-import proxy from "./proxy.json";
+import proxy from "./db/proxy.json";
 import { fetchWeather, saveWeather } from "./storage";
 
 const CACHE_EXPIRATION_TIME = 30 * 60 * 1000; // 30 minutes
